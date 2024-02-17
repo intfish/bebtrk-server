@@ -1,0 +1,23 @@
+.git/
+.github/
+.gitignore
+.dockerignore
+Dockerfile
+docker-compose.yml
+README.md
+
+# ide
+.vscode
+.idea
+
+# dart
+.dart_tool
+.packages
+.pub/
+build/
+packages
+*.lock
+
+# misc
+.env
+tmp

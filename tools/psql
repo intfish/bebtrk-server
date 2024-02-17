@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -e
+
+REPO_ROOT=$(cd "$(dirname "$0")/.."; pwd)
+ENV_FILE="${REPO_ROOT}/.env"
+cd "${REPO_ROOT}"
+
+POSTGRES_USER="bebtrk"
+# shellcheck disable=SC1090
+test -f "$ENV_FILE" && source "$ENV_FILE"
+
+[ -x "$(command -v docker-compose)" ] && dco='docker-compose' || dco='docker compose'
+CONTAINER=$($dco ps -q database)
+
+if [ -t 0 ]; then
+    # shellcheck disable=SC2016
+    if $dco exec database dpkg-query -W --showformat='${status}\n' less | grep -q 'install ok installed'; then
+        echo ""
+    else
+        echo "[postgres] installing less"
+        $dco exec -u root database sh -c 'apt update && apt install less'
+        echo "[postgres] setting less as default pager"
+        $dco exec -u root database sh -c 'echo PAGER=less -S > /etc/profile.d/pager.sh'
+    fi
+    docker exec -it -e COLUMNS="$(tput cols)" -e LINES="$(tput lines)" -e PAGER='$([ -x "$(command -v less)" ] && echo "less -S" || command -v more)' -u postgres "$CONTAINER" psql -U "${POSTGRES_USER:-postgres}" "$@"
+else
+    docker exec -i -e COLUMNS="$(tput cols)" -e LINES="$(tput lines)" -u postgres "$CONTAINER" psql -U "${POSTGRES_USER:-postgres}" "$@"
+fi

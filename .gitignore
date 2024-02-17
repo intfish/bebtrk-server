@@ -1,0 +1,15 @@
+# ide
+.vscode
+.idea
+
+# dart
+.dart_tool
+.packages
+.pub/
+build/
+packages
+*.lock
+
+# misc
+.env
+tmp
