@@ -55,7 +55,7 @@ class DbUtil {
               , lag(event_time) over w as event_stop
               , lag(id) over w as stop_id
           from clean_events
-          window w as (PARTITION BY profile_id ORDER BY event_time DESC)
+          window w as (PARTITION BY profile_id, event_action ORDER BY event_time DESC)
       ) as ts_pairs
       where ts_pairs.event_type = 'start'
     ''');
