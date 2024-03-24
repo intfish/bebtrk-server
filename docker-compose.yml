@@ -6,7 +6,7 @@ services:
         build:
             context: .
         environment:
-            BEBTRK_SERVER_DB: ${POSTGRES_DB:-bebtrk}
+            BEBTRK_SERVER_DB: ${BEBTRK_DB:-bebtrk}
             BEBTRK_SERVER_DB_HOST: ${POSTGRES_HOST:-database}
             BEBTRK_SERVER_DB_USERNAME: ${POSTGRES_USER:-bebtrk}
             BEBTRK_SERVER_DB_PASSWORD: ${POSTGRES_PASSWORD:-secret}

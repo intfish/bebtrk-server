@@ -13,3 +13,7 @@ packages
 # misc
 .env
 tmp
+
+/*.sql
+/*.gz
+/*.log
